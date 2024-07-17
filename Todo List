@@ -1,0 +1,136 @@
+<?php
+    // Function to display the list of reminders
+    function DisplayList(&$store_list_arr)
+    {   
+        if (count($store_list_arr) == 0)
+        {
+            echo "You didn't store any reminders yet.\n";
+        }
+        else
+        {   
+            $count = 1;
+            echo "\n+==============================+\n";
+            foreach ($store_list_arr as $info_display)
+            {
+                echo "$count. $info_display\n";
+                $count++;
+            }
+            echo "+==============================+\n";
+        }
+    }
+
+    // Function to add a new reminder to the list
+    function AddList(&$store_list_arr)
+    {   
+        $user_add = ucwords(strtolower(readline("Enter remainder: ")));
+        $store_list_arr[] = trim($user_add);
+        echo "\nSuccessfully added the remainder: {$user_add}\n";
+    }
+
+    // Function to update an existing reminder
+    function UpdateList(&$store_list_arr)
+    {
+        DisplayList($store_list_arr);
+
+        $user_update_bool = false;
+        do
+        {
+            if (count($store_list_arr) != 0)
+            {
+                echo "\nEnter the corresponding number you want to update.\n";
+                $user_update = readline("Enter the number: ");
+            
+                if (is_numeric($user_update) == true)
+                {
+                    if ($user_update >= 0  && $user_update <= count($store_list_arr) - 1)
+                    {
+                        $user_change = ucwords(strtolower(readline("Enter new remainder: ")));
+                        $store_list_arr[$user_update - 1] = trim($user_change);
+                        echo "Successfully updated.\n";
+                        break;
+                    }
+                    else
+                    {
+                        $user_update_bool = true;
+                    }
+                }
+                echo "Invalid number! Try Again.\n";
+                $user_update_bool = true;
+            }
+        }while($user_update_bool);
+    }
+
+    // Function to delete a reminder from the list
+    function DeleteList(&$store_list_arr)
+    {
+        DisplayList($store_list_arr);
+
+        $user_delete_bool = false;
+        do
+        {
+            if (count($store_list_arr) != 0)
+            {
+                echo "\nEnter the corresponding number you want to delete.\n";
+                $user_update = readline("Enter the number: ");
+            
+                if (is_numeric($user_update) == true)
+                {
+                    if ($user_update >= 0  && $user_update <= count($store_list_arr) - 1)
+                    {
+                        unset($store_list_arr[$user_update - 1]);
+                        echo "Successfully deleted.\n";
+                        break;
+                    }
+                    else
+                    {
+                        $user_delete_bool = true;
+                    }
+                }
+                echo "Invalid number! Try Again.\n";
+                $user_delete_bool = true;
+            }
+        }while($user_delete_bool);
+    }
+
+    // Display the main menu
+    echo "+--------------------+----------+\n";
+    echo "|      MAIN MENU     |   CODE   |\n";
+    echo "+--------------------+----------+\n";
+    echo "|    DISPLAY TASK    |    [1]   |\n";
+    echo "|    ADD TASK        |    [2]   |\n";
+    echo "|    UPDATE TASK     |    [3]   |\n";
+    echo "|    DELETE TASK     |    [4]   |\n";
+    echo "|    EXIT PROGRAM    |    [5]   |\n";
+    echo "+--------------------+----------+\n";
+
+    $store_list = [];
+    
+    // Main loop to handle user input for menu options
+    $choose_bool = true;
+    do
+    {
+        $user_chs = readline("Enter code: ");
+
+        switch ($user_chs)
+        {
+            case "1":
+                DisplayList($store_list);
+                break;
+            case "2":
+                AddList($store_list);
+                break;
+            case "3":
+                UpdateList($store_list);
+                break;
+            case "4":
+                DeleteList($store_list);
+                break;
+            case "5":
+                echo "Thank you for using our program :)";
+                $choose_bool = false; // Exit the loop
+                break;
+            default:
+                echo "Invalid Input! Try Again!\n";
+                $choose_bool = true; // Continue the loop
+        }
+    }while($choose_bool);
